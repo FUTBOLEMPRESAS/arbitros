@@ -936,7 +936,19 @@ function showView(id){
 // ============================================================
 window.addEventListener('DOMContentLoaded',()=>{
   initFilters();
-  datos=[...DATOS_RAW];
+  async function cargarDatos() {
+  const res = await fetch('https://script.google.com/macros/s/AKfycbz2HwhHsj2eM3dtpAu6EmusnTkx9EcAwYSbrsGAddYc24MpJI1SkzESPafwocQzQSrq/exec');
+  const json = await res.json();
+  datos = Array.isArray(json) ? json : (json.record || []);
+  renderAll();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initFilters();
+  cargarDatos();
+  lucide.createIcons();
+  setInterval(cargarDatos, 30000);
+});
   renderAll();
   lucide.createIcons();
 });
