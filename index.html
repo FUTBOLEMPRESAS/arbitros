@@ -821,18 +821,26 @@ function showView(id) {
 
 async function cargarDatos() {
   try {
-    const res = await fetch(API_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    datos = Array.isArray(json) ? json.map(normalizeRow) : [];
-  } catch (err) {
-    console.error(err);
-    datos = [];
-  }
-  initFilters();
-  renderAll();
-}
+    const res = await fetch(API_URL, { method: 'GET', cache: 'no-store' });
+    const text = await res.text();
 
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${text.slice(0, 120)}`);
+    }
+
+    if (text.trim().startsWith('<')) {
+      throw new Error('El endpoint está devolviendo HTML, no JSON');
+    }
+
+    const json = JSON.parse(text);
+    datos = Array.isArray(json) ? json.map(normalizeRow) : [];
+    renderAll();
+  } catch (err) {
+    console.error('Error cargando datos:', err);
+    datos = [];
+    renderAll();
+  }
+}
 window.addEventListener('DOMContentLoaded', () => {
   cargarDatos();
   lucide.createIcons();
