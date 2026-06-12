@@ -937,10 +937,11 @@ function showView(id){
 window.addEventListener('DOMContentLoaded',()=>{
   initFilters();
   async function cargarDatos() {
-  const res = await fetch('https://script.google.com/macros/s/AKfycbz2HwhHsj2eM3dtpAu6EmusnTkx9EcAwYSbrsGAddYc24MpJI1SkzESPafwocQzQSrq/exec');
+  const res = await fetch('https://script.google.com/macros/s/AKfycbzWbjLuk7aHLDc2P_ZzxvMqUfafhKebmhj2gq2hm9X6xBJMQXA9lxwZ24v_Fv2d_BY/exec');
   const json = await res.json();
-  datos = Array.isArray(json) ? json : (json.record || []);
+  datos = Array.isArray(json) ? json : [];
   renderAll();
+}
 }
 
 window.addEventListener('DOMContentLoaded', () => {
